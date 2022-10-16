@@ -9,7 +9,21 @@ window.addEventListener('load', function(){
     canvas.height = 720;
 
     class InputHandler {
+        constructor(game){
+            this.game = game;
+            // ES6 ARROW FUNCTIONS don't bind their own this, but they inherit the one from the 
+            // parent scope. We call this lexical scoping
+            window.addEventListener('keydown', e => {
+                this.game.lastKey = 'P' + e.key;
+                // console.log(this.game.lastKey);
+            });
 
+            window.addEventListener('keyup', e => {
+                this.game.lastKey = 'R' + e.key;
+                // console.log(this.game.lastKey);
+            });
+
+        }
     }
 
     class Owlbear {
@@ -24,6 +38,8 @@ window.addEventListener('load', function(){
         constructor(width, height){
             this.width = width;
             this.height = height;
+            this.lastKey = undefined;
+            this.input = new InputHandler(this);
         }
 
     }
