@@ -26,18 +26,25 @@ window.addEventListener('load', function(){
     class Owlbear {
         constructor(game){
             this.game = game;
-            this.width = 100;
-            this.height = 100;
+            this.spriteWidth = 200;
+            this.spriteHeight = 200;
+            this.frameX = 0;
+            this.frameY = 4;
+            this.maxFrame = 30;
+            this.width = this.spriteWidth;
+            this.height = this.spriteHeight;
             this.x = 200;
             this.y = 200;
             this.speedX = 0;
             //  pixels per animation frame
             this.speedY = 0;
-            this.maxSpeed = 10;
+            this.maxSpeed = 5;
+            this.image = document.getElementById('owlbear');
         }
 
         draw(context){
-            context.fillRect(this.x, this.y, this.width, this.height);
+          //  context.fillRect(this.x, this.y, this.width, this.height);
+            context.drawImage(this.image, this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x, this.y, this.spriteWidth, this.spriteHeight, this.width, this.height);
         }
 
         setSpeed(speedX, speedY){
@@ -48,16 +55,30 @@ window.addEventListener('load', function(){
         update(){
             if (this.game.lastKey == 'PArrowLeft'){
                 this.setSpeed(-this.maxSpeed, 0);
-            } else if (this.game.lastKey == 'PArrowRight'){
-                this.setSpeed(this.maxSpeed, 0);
-            } else if (this.game.lastKey == 'PArrowUp') {
-                this.setSpeed(0, -this.maxSpeed);
-            } else if (this.game.lastKey == 'PArrowDown') {
-                this.setSpeed(0, this.maxSpeed);
-            }
-            else {
+                this.frameY = 3;
+            } else if (this.game.lastKey == 'RArrowLeft' && this.speedX < 0){
                 this.setSpeed(0, 0);
-            }
+                this.frameY = 2;
+            } else if  (this.game.lastKey == 'PArrowRight'){
+                this.setSpeed(this.maxSpeed, 0);
+                this.frameY = 5;
+            } else if  (this.game.lastKey == 'RArrowRight' && this.speedX > 0){
+                this.setSpeed(0, 0);
+                this.frameY = 4;
+            } else if (this.game.lastKey == 'PArrowUp') {
+                this.setSpeed(0, -this.maxSpeed * 0.6);
+                this.frameY = 7;
+            } else if (this.game.lastKey == 'RArrowUp' && this.speedY < 0) {
+                this.setSpeed(0, 0);
+                this.frameY = 6;
+            } else if (this.game.lastKey == 'PArrowDown') {
+                this.setSpeed(0, this.maxSpeed * 0.6);
+                this.frameY = 1;
+            } else if (this.game.lastKey == 'RArrowDown' && this.speedY > 0) {
+                this.setSpeed(0, 0);
+                this.frameY = 0;
+            } 
+
             this.x += this.speedX;
             this.y += this.speedY;
             // horizontal boundries so player cant leave canvas\
@@ -72,6 +93,13 @@ window.addEventListener('load', function(){
             } else if (this.y > this.game.height - this.height){
                 this.y = this.game.height - this.height
             }
+            // sprite animations
+            if (this.frameX < this.maxFrame){
+                this.frameX++;
+            } else {
+                this.frameX = 0;
+            }
+
 
         }
     }

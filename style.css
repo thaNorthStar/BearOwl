@@ -16,7 +16,7 @@
 }
 
 canvas {
-    background: url('/Images/background.png');
+    background: url('Images/background.png');
 }
 
 #overlay {
@@ -63,4 +63,8 @@ canvas:hover ~ #leaves-right {
     50% {top: 56px;}
     100% {top: 50px;}
     
+}
+
+#owlbear {
+    display: none;
 }
