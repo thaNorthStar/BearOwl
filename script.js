@@ -23,6 +23,7 @@ window.addEventListener('load', function(){
             });
         }
     }
+
     class Owlbear {
         constructor(game){
             this.game = game;
@@ -38,8 +39,11 @@ window.addEventListener('load', function(){
             this.speedX = 0;
             //  pixels per animation frame
             this.speedY = 0;
-            this.maxSpeed = 5;
+            this.maxSpeed = 2;
             this.image = document.getElementById('owlbear');
+            this.fps = 60;
+            this.frameInterval = 1000/this.fps;
+            this.frameTimer = 0;
         }
 
         draw(context){
@@ -52,7 +56,7 @@ window.addEventListener('load', function(){
             this.speedY= speedY;
         }
 
-        update(){
+        update(deltaTime){
             if (this.game.lastKey == 'PArrowLeft'){
                 this.setSpeed(-this.maxSpeed, 0);
                 this.frameY = 3;
@@ -94,13 +98,18 @@ window.addEventListener('load', function(){
                 this.y = this.game.height - this.height
             }
             // sprite animations
-            if (this.frameX < this.maxFrame){
-                this.frameX++;
+            if (this.frameTimer > this.frameInterval){
+                //ternary
+                (this.frameX < this.maxFrame) ? this.frameX++ : this.frameX=0;
+                /*if (this.frameX < this.maxFrame){
+                    this.frameX++;
+                } else {
+                    this.frameX = 0;
+                } */
+                this.frameTimer = 0;
             } else {
-                this.frameX = 0;
+                this.frameTimer += deltaTime;
             }
-
-
         }
     }
 
@@ -115,26 +124,23 @@ window.addEventListener('load', function(){
             this.lastKey = undefined;
             this.input = new InputHandler(this);
             this.owlbear = new Owlbear(this);
-
         }
 
-        render(context){
+        render(context, deltaTime){
             this.owlbear.draw(context);
-            this.owlbear.update();
+            this.owlbear.update(deltaTime);
         }
     }
 
     const game = new Game(canvas.width, canvas.height);
-    // console log to check properties/debug
-    // console.log(game);
-    function animate(){
+    let lastTime = 0;
+    function animate(timeStamp){
+        const deltaTime = timeStamp - lastTime;
+        lastTime = timeStamp;
         ctx.clearRect(0,0,canvas.width, canvas.height);
-        game.render(ctx);
+        game.render(ctx, deltaTime);
         requestAnimationFrame(animate);
     }
 
-    animate();
-
-
-
+    animate(0);
 });
