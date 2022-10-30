@@ -25,7 +25,6 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%);
     pointer-events: none;
-    
 }
 
 #leaves-left {
@@ -35,7 +34,6 @@ canvas {
     transition: 0.3s;
     /* animation: wobble ease-in-out 1.5s infinite; */
     pointer-events: none;
-
 }
 
 #leaves-right {
@@ -45,7 +43,6 @@ canvas {
     transition: 0.2s;
     /* animation: wobble ease-in-out 1.6s infinite; */
     pointer-events: none;
-
 }
 
 canvas:hover ~ #leaves-left {
@@ -62,7 +59,6 @@ canvas:hover ~ #leaves-right {
     0% {top: 50px;}
     50% {top: 56px;}
     100% {top: 50px;}
-    
 }
 
 #owlbear, #bush, #plant, #grass {

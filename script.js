@@ -23,7 +23,7 @@ window.addEventListener('load', function(){
             });
         }
     }
-
+    
     class Owlbear {
         constructor(game){
             this.game = game;
@@ -45,17 +45,14 @@ window.addEventListener('load', function(){
             this.frameInterval = 1000/this.fps;
             this.frameTimer = 0;
         }
-
         draw(context){
           //  context.fillRect(this.x, this.y, this.width, this.height);
             context.drawImage(this.image, this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x, this.y, this.spriteWidth, this.spriteHeight, this.width, this.height);
         }
-
         setSpeed(speedX, speedY){
             this.speedX = speedX;
             this.speedY= speedY;
         }
-
         update(deltaTime){
             if (this.game.lastKey == 'PArrowLeft'){
                 this.setSpeed(-this.maxSpeed, 0);
@@ -82,7 +79,6 @@ window.addEventListener('load', function(){
                 this.setSpeed(0, 0);
                 this.frameY = 0;
             } 
-
             this.x += this.speedX;
             this.y += this.speedY;
             // horizontal boundries so player cant leave canvas\
@@ -101,18 +97,13 @@ window.addEventListener('load', function(){
             if (this.frameTimer > this.frameInterval){
                 //ternary
                 (this.frameX < this.maxFrame) ? this.frameX++ : this.frameX=0;
-                /*if (this.frameX < this.maxFrame){
-                    this.frameX++;
-                } else {
-                    this.frameX = 0;
-                } */
                 this.frameTimer = 0;
             } else {
                 this.frameTimer += deltaTime;
             }
         }
     }
-
+    
     class Object {
         constructor(game){
             this.game = game;
@@ -120,43 +111,41 @@ window.addEventListener('load', function(){
         draw(context){
             context.drawImage(this.image, this.x, this.y, this.width, this.height);
         }
+        // update to be added later to add more features
+        update(){
+        }
     }
-
     class Bush extends Object{
         constructor(game){
             super(game);
             this.game = game;
             this.image = document.getElementById('bush');
-            this.imageWidth = 216;
-            this.imageHeight = 100;
-            this.width = this.imageWidth;
-            this.height = this.imageHeight;
+            this.imageWidth = this.width = 216;
+            this.imageHeight = this.height = 100;
             this.x = Math.random() * this.game.width - this.width;
             this.y = this.game.topMargin + Math.random() * (this.game.height - this.height - this.game.topMargin);
         }
     }
+
     class Plant extends Object{
         constructor(game){
             super(game);
             this.game = game;
             this.image = document.getElementById('plant');
-            this.imageWidth = 212;
-            this.imageHeight = 118;
-            this.width = this.imageWidth;
-            this.height = this.imageHeight;
+            this.imageWidth = this.width = 212;
+            this.imageHeight = this.height = 118;
             this.x = Math.random() * this.game.width - this.width;
             this.y = this.game.topMargin + Math.random() * (this.game.height - this.height - this.game.topMargin);
         }
     }
+
     class Grass extends Object{
         constructor(game){
             super(game);
             this.game = game;
             this.image = document.getElementById('grass');
-            this.imageWidth = 103;
-            this.imageHeight = 182;
-            this.width = this.imageWidth;
-            this.height = this.imageHeight;
+            this.width = this.imageWidth = 103;
+            this.height = this.imageHeight = 102;
             this.x = Math.random() * this.game.width - this.width;
             this.y = this.game.topMargin + Math.random() * (this.game.height - this.height - this.game.topMargin);
         }
@@ -172,16 +161,19 @@ window.addEventListener('load', function(){
             this.owlbear = new Owlbear(this);
             this.numberOfPlants = 10;
             this.plants = [];
+            this.gameObjects = [];
         }
-
         render(context, deltaTime){
-            this.owlbear.draw(context);
-            this.owlbear.update(deltaTime);
-            this.plants.forEach(plant => plant.draw(context));
+            this.gameObjects = [...this.plants, this.owlbear];
+            this.gameObjects.sort((a,b) => {
+                return (a.y + a.height) - (b.y + b.height)
+            });
+            this.gameObjects.forEach(object => {
+                object.draw(context);
+                object.update(deltaTime);
+            });
         }
-
         init(){
-            
             for (let i = 0; i < this.numberOfPlants; i++){
                 const randomize = Math.random();
                 if (randomize < 0.3) this.plants.push(new Plant(this));
@@ -201,6 +193,6 @@ window.addEventListener('load', function(){
         game.render(ctx, deltaTime);
         requestAnimationFrame(animate);
     }
-
+    
     animate(0);
 });

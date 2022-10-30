@@ -1,3 +1,7 @@
-next lesson 9 1:03:16
+done w/ basics
 
-https://youtu.be/eYTnoJluds0?t=3796
+source
+https://youtu.be/eYTnoJluds0
+
+next extended version:
+https://www.udemy.com/course/learn-game-development-with-javascript/?referralCode=69874A38D543D7F510F2
